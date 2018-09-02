@@ -35,7 +35,7 @@ module TagSelector: TagSelector = {
   let getSelectedTags = (state) => {
     state.selectors 
       |> List.fold_left((tags, tagOpt) => tags 
-        |> List.append(tagOpt |> Belt.Option.map(_, tag => [tag]) 
+        |> List.append(tagOpt |> Js.Option.map((. tag) => [tag]) 
         |> Js.Option.getWithDefault([])), 
       [])
   }
