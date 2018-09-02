@@ -61,21 +61,6 @@ let component = ReasonReact.reducerComponent("memo-form");
 
 let handleInput = (handler, e) => ReactEvent.Form.target(e)##value |> handler;
 
-module EventBus = {
-  let subscribers: ref(Belt.Map.String.t(unit => unit)) = ref(Belt.Map.String.fromArray([||]));
-
-  let subscribe = (subscriber) => {
-    let key = Js.Math.random() |> string_of_float;
-    let updatedAllSubscriber = Belt.Map.String.set(subscribers^, key, subscriber);
-    subscribers := updatedAllSubscriber;
-    key
-  };
-
-  let publish = () => {
-    let _ = subscribers^ |> Belt.Map.String.map (_, sub => sub());
-  }
-}
-
 let make = (~tags, ~onSubmit, _children) => {
   ...component,
   initialState: () => { inputValue: None, tagSelector: TagSelector.initialState },
