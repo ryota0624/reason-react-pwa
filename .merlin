@@ -1,0 +1,24 @@
+####{BSB GENERATED: NO EDIT
+B lib/bs
+FLG -open ReactTemplate
+FLG -ppx '/Users/ryota/reason/pwa/node_modules/bs-platform/lib/reactjs_jsx_ppx_2.exe'
+FLG -ppx /Users/ryota/reason/pwa/node_modules/bs-platform/lib/bsppx.exe
+S /Users/ryota/reason/pwa/node_modules/bs-platform/lib/ocaml
+B /Users/ryota/reason/pwa/node_modules/bs-platform/lib/ocaml
+FLG -nostdlib -color always
+FLG -w -30-40+6+7+27+32..39+44+45+101
+S /Users/ryota/reason/pwa/node_modules/reason-react/lib/ocaml
+B /Users/ryota/reason/pwa/node_modules/reason-react/lib/ocaml
+S src/reason
+B lib/bs/src/reason
+S src/reason/view
+B lib/bs/src/reason/view
+S src/reason/view/tag
+B lib/bs/src/reason/view/tag
+S src/reason/view/memo
+B lib/bs/src/reason/view/memo
+S src/reason/type
+B lib/bs/src/reason/type
+S src/reason/container
+B lib/bs/src/reason/container
+####BSB GENERATED: NO EDIT}
