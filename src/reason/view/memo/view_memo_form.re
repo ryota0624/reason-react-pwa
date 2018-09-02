@@ -1,6 +1,20 @@
 open Type.Tag;
 
-module TagSelector = {
+module type TagSelector = {
+  type state
+  let initialState: state
+
+  let make: (~onChange: state => unit, ~state: state,
+    ~tags: list(ReactTemplate.Type.Tag.tag), 'a) =>
+    ReasonReact.componentSpec(ReasonReact.stateless, ReasonReact.stateless,
+                             ReasonReact.noRetainedProps,
+                             ReasonReact.noRetainedProps,
+                             ReasonReact.actionless)
+
+  let getSelectedTags: state => list(string);                           
+};
+
+module TagSelector: TagSelector = {
   type selectors = list(option(string));
 
   type state = {
@@ -16,6 +30,14 @@ module TagSelector = {
     | IncreaseSelector => { selectors : state.selectors |> List.append([None]) }
     | Reset => { selectors : [] }
     };
+  }
+
+  let getSelectedTags = (state) => {
+    state.selectors 
+      |> List.fold_left((tags, tagOpt) => tags 
+        |> List.append(tagOpt |> Belt.Option.map(_, tag => [tag]) 
+        |> Js.Option.getWithDefault([])), 
+      [])
   }
 
   let component = ReasonReact.statelessComponent("memo-tag-selector");
@@ -43,7 +65,6 @@ module TagSelector = {
       </div>
     }
   };
-
 }
 
 type state = {
@@ -71,8 +92,9 @@ let make = (~tags, ~onSubmit, _children) => {
     | Submit => {
         ReasonReact.SideEffects(self => {
           let _ = self.state.inputValue |> Belt.Option.map(_, onSubmit);
+          let tags = TagSelector.getSelectedTags(self.state.tagSelector);
           self.send(ClearInputText);
-          self.send(ChangeTagSelector(TagSelector.initialState))
+          self.send(ChangeTagSelector(TagSelector.initialState));
         });
       }
     | ChangeTagSelector(selector) => {
