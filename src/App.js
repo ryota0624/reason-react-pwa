@@ -2,19 +2,22 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import * as ReasonHello from "./reason/hello";
+import {createdTagEvent} from "./EventTypes";
+import {AppRequestCustomEvent} from "./SeriveProtocol";
 
 class App extends Component {
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-        <ReasonHello.jsComponent message="hello" onSubmitMemo={(text) => alert(text)}></ReasonHello.jsComponent>
+        <ReasonHello.jsComponent onSubmitTag={(label) => {
+          createdTagEvent(label);
+          
+          const request = new AppRequestCustomEvent("tag/store", (payload) => {
+            console.log(payload);
+          });
+
+          request.dispatch();
+        }}></ReasonHello.jsComponent>
       </div>
     );
   }

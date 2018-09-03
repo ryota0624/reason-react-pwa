@@ -1,26 +1,26 @@
 let component = ReasonReact.statelessComponent("hello");
 
-let make = (_children, ~message, ~onSubmitMemo) => {
+let make = (_children, ~onSubmitMemo) => {
   ...component,
   render: _ => 
     <div>
-      (ReasonReact.string(message))
       <Container.MemoContainer />
-      <Container.TagContainer tagList=(GlobalState.getAllTags()) onSubmit=(GlobalState.addTag) />
+      <Container.TagContainer tagList=(GlobalState.getAllTags()) onSubmit=((tag) => { 
+        GlobalState.addTag(tag);
+        onSubmitMemo(tag.label)
+      }) />
     </div>
 };
 
 [@bs.deriving abstract]
 type jsProps = {
-  message: string,
-  onSubmitMemo: string => unit
+  onSubmitTag: string => unit
 };
 
 let jsComponent =
   ReasonReact.wrapReasonForJs(~component, jsProps =>
     make(
-      ~message=jsProps |> messageGet,
-      ~onSubmitMemo=jsProps |> onSubmitMemoGet,
+      ~onSubmitMemo=jsProps |> onSubmitTagGet,
       [||],
     )
   );
